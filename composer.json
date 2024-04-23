@@ -1,0 +1,7 @@
+{
+	"require": {
+		"php": ">=5.3.7",
+		"vonage/client": "^4.0",
+		"twilio/sdk": "^7.13"
+	}
+}
