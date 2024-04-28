@@ -6,27 +6,27 @@
 </head>
 
 <body class="">
-    
-    <?php $this->load->view('loading_screen');?>
+
+    <?php $this->load->view('loading_screen'); ?>
     <div class="wrapper ">
 
         <!-- Top NavBar -->
-        <?php $this->load->view('navigation/sidebar');?>
+        <?php $this->load->view('navigation/sidebar'); ?>
         <!-- End of NavBar -->
 
         <div class="main-panel">
 
-        <!-- Navbar -->
-        <?php $this->load->view('navigation/topbar');?>
-        <!-- End Navbar -->
+            <!-- Navbar -->
+            <?php $this->load->view('navigation/topbar'); ?>
+            <!-- End Navbar -->
 
             <div class="content" style="margin-top:50px">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
 
-                            <?php $this->load->view('navigation/loan_navbar');?>
-                            
+                            <?php $this->load->view('navigation/loan_navbar'); ?>
+
                             <div class="tab-content tab-space">
 
                                 <div class="tab-pane active">
@@ -43,33 +43,33 @@
                                                             <div class="col-md-1">
                                                                 <div class="form-group">
                                                                     <label class="bmd-label-floating">Loan No</label>
-                                                                    <?php if($loan_no==100){?> 
-                                                                    <input type="text" class="form-control loan_no" name="loan" value="L<?php echo 1000;?>" readonly>
-                                                                    <?php }else{ ?>
-                                                                    <input type="text" class="form-control loan_no" name="loan" value="L<?php echo $loan_no+1;?>" readonly>
+                                                                    <?php if ($loan_no == 100) { ?>
+                                                                        <input type="text" class="form-control loan_no" name="loan" value="L<?php echo 1000; ?>" readonly>
+                                                                    <?php } else { ?>
+                                                                        <input type="text" class="form-control loan_no" name="loan" value="L<?php echo $loan_no + 1; ?>" readonly>
                                                                     <?php } ?>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-2.5">
-                                                                    <div class="form-group input-group-prepend">
-                                                                        <label class="bmd-label-floating">Loan Type</label>
-                                                                        <select name="selected_loan_type" class="form-control">
-                                                                            <option value="" disabled selected>Select Loan Type</option>
-                                                                            <?php
-                                                                            // Assuming you have loaded the database library in your controller
+                                                                <div class="form-group input-group-prepend">
+                                                                    <label class="bmd-label-floating">Loan Type</label>
+                                                                    <select name="selected_loan_type" class="form-control">
+                                                                        <option value="" disabled selected>Select Loan Type</option>
+                                                                        <?php
+                                                                        // Assuming you have loaded the database library in your controller
 
-                                                                            // Fetch loan types using CodeIgniter's query builder
-                                                                            $query = $this->db->order_by('type_name', 'desc')->get('loan_types');
-                                                                            
-                                                                            // Iterate through the result set
-                                                                            foreach ($query->result() as $type):
-                                                                            ?>
-                                                                                <option value="<?php echo $type->id; ?>"><?php echo $type->type_name; ?></option>
-                                                                            <?php endforeach; ?>
-                                                                        </select>
-                                                                    </div>
+                                                                        // Fetch loan types using CodeIgniter's query builder
+                                                                        $query = $this->db->order_by('type_name', 'desc')->get('loan_types');
+
+                                                                        // Iterate through the result set
+                                                                        foreach ($query->result() as $type) :
+                                                                        ?>
+                                                                            <option value="<?php echo $type->id; ?>"><?php echo $type->type_name; ?></option>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
                                                                 </div>
-                                                                <!-- <div class="col-md-3">
+                                                            </div>
+                                                            <!-- <div class="col-md-3">
                                                                     <div class="form-group input-group-prepend">
                                                                     <label class="bmd-label-floating">Loan Plan</label>
                                                                     <?php
@@ -80,7 +80,7 @@
                                                                     ?>
                                                                     <select name="plan_id" id="plan_id" class="form-control">
                                                                         <option value="" disabled selected>Select Loan Plan</option>
-                                                                        <?php foreach ($query->result() as $row): ?>
+                                                                        <?php foreach ($query->result() as $row) : ?>
                                                                             <option value="<?php echo $row->id ?>" <?php echo isset($plan_id) && $plan_id == $row->id ? "selected" : '' ?>
                                                                                 data-months="<?php echo $row->months ?>" data-interest_percentage="<?php echo $row->interest_percentage ?>" data-penalty_rate="<?php echo $row->penalty_rate ?>">
                                                                                 <?php echo $row->months . ' month/s [ ' . $row->interest_percentage . '%, ' . $row->penalty_rate . '% ]' ?>
@@ -91,26 +91,34 @@
                                                             </div> -->
                                                             <div class="col-md-1.5">
                                                                 <div class="form-group input-group-prepend">
+                                                                    <label class="bmd-label-floating">Area</label>
+                                                                    <input type="text"  class="form-control area">
+                                                                
+                                                                </div>
+                                                            </div>
+                                                          
+                                                            <div class="col-md-1.5">
+                                                                <div class="form-group input-group-prepend">
                                                                     <label class="bmd-label-floating">Interest</label>
                                                                     <input type="text" class="form-control interest">
                                                                     <span class="input-group-text">
-                                                                            <i class="fa fa-percent"></i>
+                                                                        <i class="fa fa-percent"></i>
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-1.5">
                                                                 <div class="form-group input-group-prepend">
                                                                     <label class="bmd-label-floating">Penalty</label>
-                                                                    <input type="text" class="form-control interest">
+                                                                    <input type="text" name='penalty' class="form-control interest">
                                                                     <span class="input-group-text">
-                                                                            <i class="fa fa-percent"></i>
+                                                                        <i class="fa fa-percent"></i>
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-2.5">
                                                                 <div class="form-group input-group-prepend">
                                                                     <label class="bmd-label-floating">Terms (Months)</label>
-                                                                    <select name="terms" class="form-control">
+                                                                    <select name="terms" class="form-control terms">
                                                                         <option value="" disabled selected>Select Terms</option>
                                                                         <option value="3">3 Months</option>
                                                                         <option value="6">6 Months</option>
@@ -124,28 +132,28 @@
                                                             <div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <label class="bmd-label-floating">Date</label>
-                                                                    <input type="date" class="form-control date" name="date" value="<?php echo date('Y-m-d');?>" readonly>
+                                                                    <input type="date" class="form-control date" name="date" value="<?php echo date('Y-m-d'); ?>" readonly>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <div class="input-group no-border">
-                                                                    <?php if(isset($account_no)){?>
-                                                                       <input type="text" value="<?php echo $account_no?>" class="form-control accnt_no" placeholder="Account no" autofocus required>
-                                                                    <?php }else{ ?>
+                                                                    <?php if (isset($account_no)) { ?>
+                                                                        <input type="text" value="<?php echo $account_no ?>" class="form-control accnt_no" placeholder="Account no" autofocus required>
+                                                                    <?php } else { ?>
                                                                         <input type="text" value="" class="form-control accnt_no" placeholder="Account no" autofocus required>
                                                                     <?php } ?>
                                                                     <button type="submit" class="btn btn-primary btn-round btn-just-icon search_account">
-                                                                    <i class="material-icons">search</i>
-                                                                    <div class="ripple-container"></div>
+                                                                        <i class="material-icons">search</i>
+                                                                        <div class="ripple-container"></div>
                                                                     </button>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group input-group-prepend">
                                                                     <span class="input-group-text">
-                                                                            ₱
+                                                                        ₱
                                                                     </span>
                                                                     <label class="bmd-label-floating pl-3">Loan Amount</label>
                                                                     <input type="number" min="0.01" step="0.01" max="100000" class="form-control text-right amount font-weight-bold" name="amount" required>
@@ -155,10 +163,11 @@
                                                                 <div class="form-group">
                                                                     <select id="inputState1" class="form-control collector">
                                                                         <option disabled selected>Choose collector...</option>
-                                                                        <?php foreach($collector as $key => $collect) { 
-                                                                            if(!empty($collect)){  ?>
-                                                                            <option value="<?php echo $collect['username'];?>"><?php echo $collect['firstname'];?> </option>
-                                                                        <?php }} ?>
+                                                                        <?php foreach ($collector as $key => $collect) {
+                                                                            if (!empty($collect)) {  ?>
+                                                                                <option value="<?php echo $collect['username']; ?>"><?php echo $collect['firstname']; ?> </option>
+                                                                        <?php }
+                                                                        } ?>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -167,12 +176,13 @@
                                                                 <div class="form-group">
                                                                     <select id="inputState" class="form-control verifier">
                                                                         <option disabled selected>Verified by...</option>
-                                                                        <?php 
-                                                                        foreach($verifier as $key => $verified) { ?>
+                                                                        <?php
+                                                                        foreach ($verifier as $key => $verified) { ?>
 
-                                                                           <?php if(!empty($verified)){  ?>
-                                                                            <option value="<?php echo $verified['username'];?> "><?php echo $verified['firstname'];?></option>
-                                                                        <?php }} ?>
+                                                                            <?php if (!empty($verified)) {  ?>
+                                                                                <option value="<?php echo $verified['username']; ?> "><?php echo $verified['firstname']; ?></option>
+                                                                        <?php }
+                                                                        } ?>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -261,7 +271,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row c-add" style="display: none" >
+                                                        <div class="row c-add" style="display: none">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label class="label">Current Address</label>
@@ -273,7 +283,7 @@
                                                             <div class="col-md-4">
                                                                 <div class="row ml-1">
                                                                     <i class="fas fa-toggle-off mr-2" rel="tooltip" title="Select current address" onclick="business_add(this)" id="c-add"></i>
-                                                                        Same as the current address
+                                                                    Same as the current address
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -293,7 +303,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <button type="button" class="btn btn-social btn-just-icon btn-round btn-primary" id="add_co-maker" rel="tooltip" title="Add another co-maker">
-                                                            <i class="fa fa-plus"></i>
+                                                                <i class="fa fa-plus"></i>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -329,13 +339,12 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
-        <?php $this->load->view('templates/change_pass') ?>
-	<?php $this->load->view('templates/footer') ?>
-</body>
 
+    </div>
+    <?php $this->load->view('templates/change_pass') ?>
+    <?php $this->load->view('templates/footer') ?>
+</body>

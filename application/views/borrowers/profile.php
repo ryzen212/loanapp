@@ -138,8 +138,13 @@
                                                             <td><a href="<?php echo base_url() . 'payments/loan-details/' . $value['loan_no']; ?>"><?php echo $value['loan_no']; ?></a></td>
                                                             <td><?php echo number_format($value['loan_amount'], 2, '.', ','); ?> PHP</td>
                                                             <td><?php echo $value['loan_stat']; ?></td>
-                                                            <td><?php $time = $value['due_date'];
-                                                                echo date('M. d, Y', strtotime($time)); ?></td>
+                                                            <td><?php
+                                                                if ($value['due_date']) {
+                                                                    echo date('M. d, Y', strtotime($value['due_date']));
+                                                                } else {
+                                                                    echo 'Waiting for cash release';
+                                                                }
+                                                                ?></td>
                                                         </tr>
                                                 <?php }
                                                 } ?>
@@ -206,9 +211,15 @@
                                                                     <div class="form-group">
                                                                         <div class="form-group form-file-upload form-file-multiple ">
                                                                             <input type="file" accept="image/*" onchange="loadFile(event)" class="inputFileHidden" name="client_img" id="client_img" required>
-                                                                            <div class="fileinput-new thumbnail img-raised text-center">
-                                                                                <img class="img-fluid" id="output" src="<?php echo base_url(); ?>assets/images/person.png" alt="client-img" />
-                                                                            </div>
+                                                                            <?php if (!empty($profile['prof-img'])) { ?>
+                                                                                <div class="fileinput-new thumbnail img-raised text-center">
+                                                                                    <img class="img-fluid" id="output" src="<?php echo base_url(); ?>assets/uploads/<?= $profile['prof-img'] ?>" alt="client-img" />
+                                                                                </div>
+                                                                            <?php  } else { ?>
+                                                                                <div class="fileinput-new thumbnail img-raised text-center">
+                                                                                    <img class="img-fluid" id="output" src="<?php echo base_url(); ?>assets/images/person.png" alt="client-img" />
+                                                                                </div>
+                                                                            <?php  } ?>
                                                                             <div class="input-group mt-2">
                                                                                 <span class="input-group-btn">
                                                                                     <button type="button" class="btn btn-fab btn-round btn-primary">

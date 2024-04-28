@@ -86,7 +86,7 @@ $(document).ready(function () {
 $(document).on('click', '.pay', function () {
 	var daily_payment = $('.daily_payment').val();
 	var loan_no = $('.loan_no').val();
-	var payment_month = ('.payment_month').val();
+	var payment_month = $('#payment_month').text();
 
 	$.ajax({
 		type: "POST",
@@ -249,9 +249,9 @@ $(document).ready(function () {
 						"warning"
 					);
 				}
-				setTimeout(function () {
-					window.location.reload(1);
-				}, 3000);
+				// setTimeout(function () {
+				// 	window.location.reload(1);
+				// }, 3000);
 			},
 			error: function (jqXHR, exception) {
 				$("#loading-screen").hide();
@@ -281,9 +281,9 @@ $(document).ready(function () {
 				);
 
 
-				setTimeout(function () {
-					window.location.reload(1);
-				}, 3000);
+				// setTimeout(function () {
+				// 	window.location.reload(1);
+				// }, 3000);
 			}
 
 		});

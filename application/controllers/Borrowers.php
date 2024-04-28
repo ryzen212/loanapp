@@ -104,6 +104,8 @@ class Borrowers extends CI_Controller
 
 			$this->load->view('templates/header', $title);
 			$this->load->view('borrowers/profile', $client);
+			// var_dump($client['loan']);
+
 		} else {
 			redirect(base_url('error404'));
 		}
@@ -164,7 +166,7 @@ class Borrowers extends CI_Controller
 			if ($fileError === 0) {
 				$extension = pathinfo($fileName, PATHINFO_EXTENSION);
 
-				if (in_array($extension, $allowedExtensions)) {
+				if (in_array(strtolower($extension), $allowedExtensions)) {
 					$newFileName = uniqid() . '.' . $extension;
 					$uploadPath = $uploadDirectory . $newFileName;
 
@@ -242,83 +244,73 @@ class Borrowers extends CI_Controller
 		$config['upload_path'] = './uploads/';
 		$config['allowed_types'] = 'jpg|png|jpeg|gif';
 		$config['encrypt_name'] = TRUE;
+		$uploadDirectory = FCPATH . 'assets/uploads/';
+		$allowedExtensions = array('jpg', 'png', 'jpeg', 'gif');
 
 		$this->load->library('upload', $config);
 
-		if (!$this->upload->do_upload('img')) {
+		// Check if a file is uploaded
+		if (!empty($_FILES['client_img']['tmp_name'])) {
+			$fileInfo = $_FILES['client_img'];
 
-			$client_data = array(
-				'account_no' => $this->input->post('account_no'),
-				'profile_img' => $this->input->post('profile_img'),
-				'email' => $this->input->post('email'),
-				'number1' => $this->input->post('num1'),
-				'number2' => $this->input->post('num2'),
-				'bday' => $this->input->post('bday'),
-				'gender' => $this->input->post('gender'),
-				'info' => $this->input->post('info')
-			);
+			// Check for file upload errors
+			if ($fileInfo['error'] === UPLOAD_ERR_OK) {
+				$extension = pathinfo($fileInfo['name'], PATHINFO_EXTENSION);
+				var_dump($extension);
+				exit;
+				// Check if the file extension is allowed
+				if (in_array(strtolower($extension), $allowedExtensions)) {
+					$newFileName = uniqid() . '.' . $extension;
+					$uploadPath = $uploadDirectory . $newFileName;
 
-			$name = array(
-				'account_no' => $this->input->post('account_no'),
-				'mname' => $this->input->post('mname'),
-				'fname' => $this->input->post('fname'),
-				'lname' => $this->input->post('lname')
-			);
+					// Move uploaded file to destination
+					if (move_uploaded_file($fileInfo['tmp_name'], $uploadPath)) {
+						$this->load->library('image_lib', $config);
+						// Resize the uploaded image if needed
+						$this->image_lib->resize();
 
-			$update_profile = $this->borrowers_model->update_profile($client_data);
-
-
-			if ($update_profile) {
-				$update_name = $this->borrowers_model->update_name($name);
-
-				$validator['success'] = true;
-				$validator['messages'] = 'Update successfully!';
+						$validator['success'] = true;
+						$validator['messages'][] = 'File uploaded successfully.';
+					} else {
+						$validator['messages'][] = 'Error occurred while moving the file.';
+					}
+				} else {
+					$validator['messages'][] = 'Invalid file type. Allowed types: ' . implode(', ', $allowedExtensions);
+				}
 			} else {
-				$validator['success'] = false;
-				$validator['messages'] = "Something went wrong!";
+				$validator['messages'][] = 'Error occurred during file upload: ' . $fileInfo['error'];
 			}
+		}
+
+		// Update client data
+		$client_data = array(
+			'account_no' => $this->input->post('account_no'),
+			'img' => isset($newFileName) ? $newFileName : '', // If a new file is uploaded, use its name; otherwise, keep the old image name
+			'email' => $this->input->post('email'),
+			'number1' => $this->input->post('num1'),
+			'number2' => $this->input->post('num2'),
+			'bday' => $this->input->post('bday'),
+			'gender' => $this->input->post('gender'),
+			'info' => $this->input->post('info')
+		);
+
+		$name = array(
+			'account_no' => $this->input->post('account_no'),
+			'mname' => $this->input->post('mname'),
+			'fname' => $this->input->post('fname'),
+			'lname' => $this->input->post('lname')
+		);
+
+		// Update client profile and name in the database
+		$update_profile = $this->borrowers_model->update_profile($client_data);
+
+		if ($update_profile) {
+			$update_name = $this->borrowers_model->update_name($name);
+
+			$validator['success'] = true;
+			$validator['messages'] = 'Update successfully!';
 		} else {
-			$data = $this->upload->data();
-			//Resize and Compress Image
-			$config['image_library'] = 'gd2';
-			$config['source_image'] = './uploads/' . $data['file_name'];
-			$config['create_thumb'] = FALSE;
-			$config['maintain_ratio'] = FALSE;
-			$config['quality'] = '60%';
-			$config['width'] = 600;
-			$config['height'] = 400;
-			$config['new_image'] = './uploads/' . $data['file_name'];
-
-			$this->load->library('image_lib', $config);
-			$this->image_lib->resize();
-
-
-			$client_data = array(
-				'account_no' => $this->input->post('account_no'),
-				'img' => $data['file_name'],
-				'email' => $this->input->post('email'),
-				'number1' => $this->input->post('num1'),
-				'number2' => $this->input->post('num2'),
-				'bday' => $this->input->post('bday'),
-				'gender' => $this->input->post('gender'),
-				'info' => $this->input->post('info')
-			);
-
-			$name = array(
-				'account_no' => $this->input->post('account_no'),
-				'mname' => $this->input->post('mname'),
-				'fname' => $this->input->post('fname'),
-				'lname' => $this->input->post('lname')
-			);
-
-			$update_profile = $this->borrowers_model->update_profile($client_data);
-
-			if ($update_profile) {
-				$update_name = $this->borrowers_model->update_name($name);
-
-				$validator['success'] = true;
-				$validator['messages'] = 'Update successfully!';
-			}
+			$validator['messages'][] = "Something went wrong!";
 		}
 
 		echo json_encode($validator);

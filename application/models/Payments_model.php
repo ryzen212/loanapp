@@ -50,10 +50,10 @@ class Payments_model extends CI_Model
         }
     }
 
-    public function insert_payment($data, $payment_no, $payment_month)
+    public function insert_payment($data, $payment_no)
     {
         $loan_no = $data['loan_no'];
-
+        $payment_month =  $data['payment_month'];
         if (isset($data['total_pay'])) {
             $payment = array(
                 'loan_no' => $loan_no,
